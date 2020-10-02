@@ -1,0 +1,97 @@
+//Print:
+const deepPrint = (o: Object): void => {
+    if(typeof o === 'string' || typeof o === 'boolean' || 
+    typeof o === 'number'){
+        console.log(o);
+    }else if(Array.isArray(o)){
+        for(let i:number = 0;i < o.length;i++){
+            deepPrint(o[i]);
+        }
+    }else if(typeof o === 'object'){
+        for(let i=0;i<Object.entries(o).length;i++){
+            for(let j=0;j<Object.entries(o)[i].length;j++){
+                deepPrint(Object.entries(o)[i][j]);
+            }
+        }
+    }else{
+        console.log('No hay nada que imprimir.');
+    }
+}
+
+//Clone:
+const deepClone = (o: Object): Object => {
+    let obj: Object = new Object;
+
+    if(typeof o === 'string' || typeof o === 'boolean' || 
+    typeof o === 'number'){
+        obj = o;
+    }else if(Array.isArray(o)){
+        obj = o.slice();
+    }else if(typeof o === 'object'){
+        obj = Object.assign(o);
+    }else{
+        console.log('No hay nada que hacer.');
+    }
+    return obj;
+}
+
+//Equal:
+const deepEqual = (o1: Object, o2: Object): boolean => {
+    let equal: boolean = false; 
+
+    if(typeof o1 === typeof o2){
+        if(typeof o1 === 'string' || typeof o1 === 'boolean' || 
+        typeof o1 === 'number'){
+            equal = (o1 === o2);
+        }else if(Array.isArray(o1) && Array.isArray(o2)){
+            if(o1.length === o2.length){
+                for(let i=0;i<o1.length;i++){
+                    deepEqual(o1[i], o2[i]);
+                }
+            }
+        }else if(typeof o1 === 'object'){
+            if((Object.keys(o2).length === Object.keys(o2).length) && 
+            (Object.values(o2).length === Object.values(o1).length)){
+                for(let i=0;i<Object.keys(o2).length;i++){
+                    if(Object.keys(o1).sort()[i] === Object.keys(o2).sort()[i]){
+                        for(let i=0;i<Object.values(o2).length;i++){
+                            deepEqual(Object.values(o1).sort()[i], Object.values(o2).sort()[i]);
+                        }
+                    }
+                }
+            }
+        }else{
+            console.log('No hay nada que hacer.');
+        }
+    }
+    return equal;
+}
+
+//Ejemplos:
+const num: number = 96;
+const array: number[] = [1,2,3,4,5];
+interface IPersona{
+    name: string;
+    edad: number;
+    coche?: boolean;
+}
+const persona: IPersona={
+    name: "Alberto",
+    edad: 20,
+    coche: true
+}
+const num1: number = 96;
+const array1: number[] = [22,34,2];
+const persona1: IPersona={
+    name: "Alberto",
+    edad: 20,
+    coche: true
+}
+deepPrint(num1);
+deepPrint(persona1);
+
+console.log(deepClone(num));
+deepPrint(deepClone(persona));
+
+console.log(deepEqual(persona, persona1));
+deepPrint(deepEqual(num, num1));
